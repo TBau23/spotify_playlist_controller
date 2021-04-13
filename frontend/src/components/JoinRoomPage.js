@@ -18,6 +18,29 @@ export default class JoinRoomPage extends Component {
 
     handleJoinRoom = () => {
         // send post reuqest to back end, see if room exists, if so, join it
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                code: this.state.roomCode
+            }),
+        };
+        fetch('/api/join-room/', requestOptions)
+        .then(res => {
+            if(res.ok) {
+                this.props.history.push(`/room/${this.state.roomCode}`)
+            } else {
+                this.setState({
+                    error: 'Room not found',
+                    code: ''
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        
+        
     }
 
     render() {
@@ -40,7 +63,7 @@ export default class JoinRoomPage extends Component {
                     />
                 </Grid>
                 <Grid item xs={12} align='center'>
-                    <Button variant='contained' color='primary' >
+                    <Button variant='contained' color='primary' onClick={this.handleJoinRoom}>
                         Enter
                     </Button>
                 </Grid>
