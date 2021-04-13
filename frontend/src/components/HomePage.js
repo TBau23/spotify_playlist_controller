@@ -1,28 +1,31 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import JoinRoomPage from './JoinRoomPage';
-import CreateRoomPage from './CreateRoomPage';
-import Room from './Room';
+import { Grid, Button, ButtonGroup, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 export default class Homepage extends Component {
     constructor(props) {
         super(props)
+    
+
     }
+
+    // when this page loads we want to check if the user's session is already tied to an active room so they can easily rejoin
 
     render() {
         return (
-            <Router>
-                <Switch >
-                    
-                    <Route path ='/join' component={JoinRoomPage} />
-                    <Route path ='/create' component={CreateRoomPage} />
-                    <Route path='/room/:roomCode' component={Room} />
-                    <Route exact path='/'>
-                        <p>This is home page</p>
-                    </Route>
-                </Switch>
-                
-            </Router>
+            <Grid container spacing={3}>
+                <Grid item xs={12} align='center'>
+                    <Typography variant='h3' component='h3'>
+                        Remote Rave
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} align='center'>
+                    <ButtonGroup disableElevation variant='contained' color='primary'>
+                        <Button color='primary' to='/join' component={ Link } > Join A Room</Button>
+                        <Button color='secondary' to='/create' component={ Link } > Create A Room</Button>
+                    </ButtonGroup>
+                </Grid>
+            </Grid>
         )
     }
 }
