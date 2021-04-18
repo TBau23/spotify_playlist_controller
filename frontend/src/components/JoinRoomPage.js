@@ -53,7 +53,7 @@ export default class JoinRoomPage extends Component {
                 </Grid>
                 <Grid item xs={12} align='center'>
                     <TextField
-                        error={this.state.error}
+                        error={this.state.error.length === 0 ? false : true}
                         label='Room Code'
                         placeholder='Enter Room Code'
                         value={this.state.roomCode}

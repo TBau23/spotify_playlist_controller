@@ -17,7 +17,13 @@ export default class Room extends Component {
 
         getRoomInfo = () => {
             fetch('/api/get-room' + '?code=' + this.roomCode)
-            .then(res => res.json())
+            .then(res => {
+                if(!res.ok) { // if the response is not valid e.g. the room doesn't exist, redirect back to home page
+                    this.props.clearRoom();
+                    this.props.history.push('/')
+                }
+                return res.json()
+            })
             .then(data => {
                 this.setState({
                     votesToSkip: data.votes_to_skip,
@@ -34,6 +40,7 @@ export default class Room extends Component {
                 headers: {'Content-Type': 'application/json'}
             }
             fetch('/api/leave-room/', requestOptions).then((res) => {
+                this.props.clearRoom();
                 this.props.history.push('/')
             })
         }
