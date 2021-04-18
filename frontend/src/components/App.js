@@ -14,6 +14,7 @@ export default class App extends Component {
         }
     }
 
+    // I would rather change this feature to just give a quick option to rejoin old room if it still exists, rather than automatically rejoining. 
     async componentDidMount() {
         // were performing an async operation within this method. without async keyword, we will have to wait for it to run before
         // anything else works
@@ -24,7 +25,10 @@ export default class App extends Component {
                roomCode: data.code
            })
         })
+        
    }
+
+   clearRoomCode
 
     render() {
         return (
@@ -34,7 +38,11 @@ export default class App extends Component {
                         
                         <Route path ='/join' component={JoinRoomPage} />
                         <Route path ='/create' component={CreateRoomPage} />
-                        <Route path='/room/:roomCode' component={Room} />
+                        <Route 
+                        path='/room/:roomCode'
+                         component={Room}
+                         
+                         />
                         <Route exact path='/' render={() => {
                             return this.state.roomCode ? (<Redirect to={`/room/${this.state.roomCode}`} />) : (<HomePage />)}
                             } />
