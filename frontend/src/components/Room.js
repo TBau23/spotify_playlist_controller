@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Button, Typography } from '@material-ui/core';
-
+import { Grid, Button, Typography, Dialog } from '@material-ui/core';
 
 
 export default class Room extends Component {
@@ -10,45 +9,79 @@ export default class Room extends Component {
             votesToSkip: 2,
             guestCanPause: false,
             isHost: false,
+            showSettings: false,
+            modalOpen: false
         }; 
         this.roomCode = this.props.match.params.roomCode;
         this.getRoomInfo()
     }
-
-        getRoomInfo = () => {
-            fetch('/api/get-room' + '?code=' + this.roomCode)
-            .then(res => {
-                if(!res.ok) { // if the response is not valid e.g. the room doesn't exist, redirect back to home page
-                    this.props.clearRoom();
-                    this.props.history.push('/')
-                }
-                return res.json()
-            })
-            .then(data => {
-                this.setState({
-                    votesToSkip: data.votes_to_skip,
-                    guestCanPause: data.guest_can_pause,
-                    isHost: data.is_host
-                })
-            })
-            
-        }
-
-        leaveRoom = () => {
-            const requestOptions = {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'}
-            }
-            fetch('/api/leave-room/', requestOptions).then((res) => {
+    // in order to display room data, neet to give back end the code so that it can find the room 
+    getRoomInfo = () => {
+        fetch('/api/get-room' + '?code=' + this.roomCode)
+        .then(res => {
+            if(!res.ok) { // if the response is not valid e.g. the room doesn't exist, redirect back to home page
                 this.props.clearRoom();
                 this.props.history.push('/')
+            }
+            return res.json()
+        })
+        .then(data => {
+            this.setState({
+                votesToSkip: data.votes_to_skip,
+                guestCanPause: data.guest_can_pause,
+                isHost: data.is_host
             })
+        })
+        
+    }
+
+    leaveRoom = () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
         }
-        // in order to display room data, neet to give back end the code so that it can find the room 
+        fetch('/api/leave-room/', requestOptions).then((res) => {
+            this.props.clearRoom();
+            this.props.history.push('/')
+        })
+    }
+
+    toggleShowSettings = () => {
+        this.setState({
+            showSettings: !this.state.showSettings
+        })
+    }
+
+    toggleShowModal = (value) => {
+        this.setState({
+            modalOpen: value
+        })
+    }
+
+    renderSettingsButton = () => {
+        return (
+            <Grid item xs={12} align='center'>
+                <Button variant='contained' color='primary' onClick={() => this.toggleShowModal(true)}>Settings</Button>
+            </Grid>
+        )
+    }
+
+    renderSettingsModal = () => {
+        return (
+            <Dialog open={this.state.modalOpen} onClose={() => this.toggleShowModal(false)}>
+                <Grid item xs={12} align='center' >
+                    <Typography variant='h6' component='h6' >
+                        Host: {this.state.isHost === true ? 'True' : 'False'}
+                    </Typography>
+                </Grid>
+            </Dialog>
+        )
+    }
     
     render() {
         return (
             <Grid container spacing={1}>
+                {this.state.modalOpen === true ? this.renderSettingsModal() : null}
                 <Grid item xs={12} align='center' >
                     <Typography variant='h4' component='h4' >
                         Code: {this.roomCode}
@@ -69,9 +102,11 @@ export default class Room extends Component {
                         Guest can Pause: {this.state.guestCanPause === true ? 'True' : 'False'}
                     </Typography>
                 </Grid>
+                {this.state.isHost === true ? this.renderSettingsButton() : null}
                 <Grid item xs={12} align='center' >
                     <Button variant='contained' color='secondary' onClick={this.leaveRoom}> Leave Room</Button>
                 </Grid>
+                
                 
 
             </Grid>

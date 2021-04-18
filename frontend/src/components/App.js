@@ -25,7 +25,6 @@ export default class App extends Component {
                roomCode: data.code
            })
         })
-        
    }
 
    clearRoomCode = () => {
@@ -33,8 +32,6 @@ export default class App extends Component {
            roomCode : null
        })
    }
-
-   
 
     render() {
         return (
