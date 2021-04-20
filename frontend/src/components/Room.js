@@ -4,6 +4,8 @@ import CreateRoomPage from './CreateRoomPage';
 
 
 export default class Room extends Component {
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -62,7 +64,6 @@ export default class Room extends Component {
     }
 
 
-
     renderSettingsModal = () => {
         return (
             <Grid container spacing={1}>
@@ -72,19 +73,19 @@ export default class Room extends Component {
                         votesToSkip={this.state.votesToSkip}
                         guestCanPause={this.state.guestCanPause}
                         roomCode={this.roomCode}
-                        updateCallback={null}
-
+                        updateCallback={() => {}}
                     />
-
                 </Grid>
-
+                <Grid item xs={12} align='center' >
+                    <Button variant='contained' color='secondary' onClick={() => this.toggleShowSettings(false)}> Close</Button>
+                </Grid>
             </Grid>
         )
     }
     
     render() {
         if(this.state.showSettings) {
-            return this.renderSettingsModal()
+            return this.renderSettingsModal();
         }
         return (
             <Grid container spacing={1}>
