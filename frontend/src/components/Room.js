@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Grid, Button, Typography, Dialog } from '@material-ui/core';
+import { Grid, Button, Typography } from '@material-ui/core';
+import CreateRoomPage from './CreateRoomPage';
 
 
 export default class Room extends Component {
@@ -10,7 +11,7 @@ export default class Room extends Component {
             guestCanPause: false,
             isHost: false,
             showSettings: false,
-            modalOpen: false
+            
         }; 
         this.roomCode = this.props.match.params.roomCode;
         this.getRoomInfo()
@@ -46,42 +47,47 @@ export default class Room extends Component {
         })
     }
 
-    toggleShowSettings = () => {
+    toggleShowSettings = (value) => {
         this.setState({
-            showSettings: !this.state.showSettings
-        })
-    }
-
-    toggleShowModal = (value) => {
-        this.setState({
-            modalOpen: value
+            showSettings: value
         })
     }
 
     renderSettingsButton = () => {
         return (
             <Grid item xs={12} align='center'>
-                <Button variant='contained' color='primary' onClick={() => this.toggleShowModal(true)}>Settings</Button>
+                <Button variant='contained' color='primary' onClick={() => this.toggleShowSettings(true)}>Settings</Button>
             </Grid>
         )
     }
 
+
+
     renderSettingsModal = () => {
         return (
-            <Dialog open={this.state.modalOpen} onClose={() => this.toggleShowModal(false)}>
-                <Grid item xs={12} align='center' >
-                    <Typography variant='h6' component='h6' >
-                        Host: {this.state.isHost === true ? 'True' : 'False'}
-                    </Typography>
+            <Grid container spacing={1}>
+                <Grid item xs={12} align='center'>
+                    <CreateRoomPage
+                        update={true}
+                        votesToSkip={this.state.votesToSkip}
+                        guestCanPause={this.state.guestCanPause}
+                        roomCode={this.roomCode}
+                        updateCallback={null}
+
+                    />
+
                 </Grid>
-            </Dialog>
+
+            </Grid>
         )
     }
     
     render() {
+        if(this.state.showSettings) {
+            return this.renderSettingsModal()
+        }
         return (
             <Grid container spacing={1}>
-                {this.state.modalOpen === true ? this.renderSettingsModal() : null}
                 <Grid item xs={12} align='center' >
                     <Typography variant='h4' component='h4' >
                         Code: {this.roomCode}
