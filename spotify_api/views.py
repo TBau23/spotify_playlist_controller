@@ -3,7 +3,7 @@ from rest_framework.views import APIView, status
 from rest_framework.response import Response
 from requests import Request, post
 import os
-from .utils import update_or_create_user_tokens
+from .utils import update_or_create_user_tokens, is_authenticated
 from django.shortcuts import redirect, render
 
 CLIENT_ID = os.environ['CLIENT_ID']
@@ -59,4 +59,6 @@ def spotify_callback(request, format=None):
 
 class IsAuthenticated(APIView):
     def get(self, request, format=None):
-        
+        # call our authentication util and return json
+        is_spotify_authenticated = is_authenticated(self.request.session.session_key)
+        return Response({'status': is_spotify_authenticated}, status=status.HTTP_200_OK)

@@ -13,6 +13,7 @@ export default class Room extends Component {
             guestCanPause: false,
             isHost: false,
             showSettings: false,
+            spotifyAuth: false
             
         }; 
         this.roomCode = this.props.match.params.roomCode;
@@ -34,8 +35,34 @@ export default class Room extends Component {
                 guestCanPause: data.guest_can_pause,
                 isHost: data.is_host
             })
+            if(this.state.isHost) {
+                console.log('wooh')
+                this.authenticateHostSpotify()
+            }
         })
         
+        
+    }
+
+    authenticateHostSpotify = () => {
+        // we only want to run this after room details method has set host state
+        fetch('/spotify_api/is-authenticated')
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            this.setState({
+                spotifyAuth: data.status
+            })
+            if(!this.state.spotifyAuth) {
+                fetch('/spotify_api/get-auth-url')
+                .then(res => res.json())
+                .then(data => {
+                    window.location.replace(data.url);
+                    
+                })
+            }
+        })
+
     }
 
     leaveRoom = () => {
