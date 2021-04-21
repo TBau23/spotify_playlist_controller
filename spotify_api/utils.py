@@ -1,6 +1,7 @@
 from .models import SpotifyToken
 from django.utils import timezone
 from datetime import timedelta
+from requests import post, Request
 import os
 
 CLIENT_ID = os.environ['CLIENT_ID']
@@ -42,14 +43,25 @@ def is_authenticated(session_key):
     if tokens:
         expiration_time = tokens.expires_in
         if expiration_time <= timezone.now():
-            refresh_tokens(tokens)
+            refresh_tokens(session_key)
+        # token is now refreshed or already was
+        return True
             
     return False
+    # we need to get the return of this util to something our frontend can understand - namely json
 
-def refresh_tokens(tokens):
-    refresh_token = tokens.refresh_token
+def refresh_tokens(session_key):
+    refresh_token = fetch_user_tokens(session_key).refresh_token
     response = post('https://accounts.spotify.com/api/token', data={
         'grant_type' : 'refresh_token',
         'refresh_token' : refresh_token,
+        'client_id' : CLIENT_ID,
+        'client_secret' : CLIENT_SECRET
+    }).json()
 
-    })
+    refresh_token = response.get('refresh_token')
+    access_token = response.get('access_token')
+    token_type = response.get('token_type')
+    expires_in = response.get('expires_in')
+
+    update_or_create_user_tokens(session_key,refresh_token,access_token, expires_in, token_type)

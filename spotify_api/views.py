@@ -56,3 +56,7 @@ def spotify_callback(request, format=None):
     update_or_create_user_tokens(request.session.session_key, refresh_token, access_token, expires_in, token_type)
     # once we have tokens, send user back to frontend homepage 
     return redirect('frontend:')
+
+class IsAuthenticated(APIView):
+    def get(self, request, format=None):
+        
