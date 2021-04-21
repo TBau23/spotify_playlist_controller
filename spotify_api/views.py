@@ -3,6 +3,8 @@ from rest_framework.views import APIView, status
 from rest_framework.response import Response
 from requests import Request, post
 import os
+from .utils import update_or_create_user_tokens
+from django.shortcuts import redirect, render
 
 CLIENT_ID = os.environ['CLIENT_ID']
 CLIENT_SECRET = os.environ['CLIENT_SECRET']
@@ -47,4 +49,10 @@ def spotify_callback(request, format=None):
     # need to store these tokens for any host users 
     # map session key with access tokens for hosts
     # thus we need to make a model
-    
+
+    if not request.session.exists(request.session.session_key):
+        request.session.create()
+
+    update_or_create_user_tokens(request.session.session_key, refresh_token, access_token, expires_in, token_type)
+    # once we have tokens, send user back to frontend homepage 
+    return redirect('frontend:')
