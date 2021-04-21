@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig', # look at API folder, apps file, Apiconfig class
     'rest_framework',
-    'frontend.apps.FrontendConfig'
+    'frontend.apps.FrontendConfig',
+    'spotify_api.apps.SpotifyApiConfig'
 ]
 
 MIDDLEWARE = [

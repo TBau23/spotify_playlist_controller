@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+# this file allows us to actually ping all the other endpoints we've built out elsewhere 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-    path('', include('frontend.urls'))
+    path('', include('frontend.urls')),
+    path('spotify/', include('spotify_api.urls'))
 ]

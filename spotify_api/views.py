@@ -16,9 +16,35 @@ class AuthURL(APIView):
         scope = 'user-read-playback-state user-modify-playback-state user-read-currently-playing'
         url = Request('GET', 'https://accounts.spotify.com/authorize', params= {
             'scope': scope,
-            'response-type' : 'code',
+            'response_type' : 'code',
             'redirect_uri' : REDIRECT_URI,
             'client_id' : CLIENT_ID
         }).prepare().url # returns an authentication url
+        # give this url to the front end 
 
         return Response({'url' : url}, status=status.HTTP_200_OK)
+
+def spotify_callback(request, format=None):
+    code = request.GET.get('code')
+    error = request.GET.get('error')
+
+    # using the code gives us access to all the info below from the response
+
+    response = post('https://accounts.spotify.com/api/token', data={
+        'grant_type' : 'authorization_code',
+        'code' : code,
+        'redirect_uri' : REDIRECT_URI,
+        'client_id' : CLIENT_ID,
+        'client_secret' : CLIENT_SECRET
+    }).json()
+
+    access_token = response.get('access_token')
+    token_type = response.get('token_type') # 'Bearer'
+    refresh_token = response.get('refresh_token')
+    expires_in = response.get('expires_in')
+    error = response.get('error')
+
+    # need to store these tokens for any host users 
+    # map session key with access tokens for hosts
+    # thus we need to make a model
+    
