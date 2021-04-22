@@ -62,3 +62,10 @@ class IsAuthenticated(APIView):
         # call our authentication util and return json
         is_spotify_authenticated = is_authenticated(self.request.session.session_key)
         return Response({'status': is_spotify_authenticated}, status=status.HTTP_200_OK)
+
+class CurrentSong(APIView):
+    def get(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        # current song has to be displayed to more than host - we need to know the room that the request is coming from
+        # can then use host info to find song
+        

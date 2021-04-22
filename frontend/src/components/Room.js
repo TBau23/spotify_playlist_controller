@@ -46,7 +46,7 @@ export default class Room extends Component {
 
     authenticateHostSpotify = () => {
         // we only want to run this after room details method has set host state
-        fetch('/spotify_api/is-authenticated')
+        fetch('/spotify_api/is-authenticated/')
         .then(res => res.json())
         .then(data => {
             console.log(data)
@@ -54,7 +54,7 @@ export default class Room extends Component {
                 spotifyAuth: data.status
             })
             if(!this.state.spotifyAuth) {
-                fetch('/spotify_api/get-auth-url')
+                fetch('/spotify_api/get-auth-url/')
                 .then(res => res.json())
                 .then(data => {
                     window.location.replace(data.url);
