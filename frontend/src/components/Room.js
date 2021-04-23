@@ -53,7 +53,7 @@ export default class Room extends Component {
             this.setState({
                 spotifyAuth: data.status
             })
-            if(!this.state.spotifyAuth) {
+            if(!data.status) {
                 fetch('/spotify_api/get-auth-url/')
                 .then(res => res.json())
                 .then(data => {
