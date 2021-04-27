@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Button, Typography } from '@material-ui/core';
 import CreateRoomPage from './CreateRoomPage';
+import SongPlayer from './SongPlayer'
 
 
 export default class Room extends Component {
@@ -21,6 +22,19 @@ export default class Room extends Component {
         this.getRoomInfo();
         this.getCurrentSong();
     }
+
+    componentDidMount = () => {
+        // spotify api doesn't support websockets so we have to continuously ping the endpoint to check on updates to song status
+        this.interval = setInterval(this.getCurrentSong,1000) 
+    }
+
+    componentWillUnmount = () => {
+        // clean up right before component is destroyed. need to stop pinging
+        clearInterval(this.interval);
+    }
+
+
+
     // in order to display room data, neet to give back end the code so that it can find the room 
     getRoomInfo = () => {
         fetch('/api/get-room/' + '?code=' + this.roomCode)
@@ -42,8 +56,6 @@ export default class Room extends Component {
                 this.authenticateHostSpotify()
             }
         })
-        
-        
     }
 
     authenticateHostSpotify = () => {
@@ -124,6 +136,7 @@ export default class Room extends Component {
                         updateCallback={() => this.getRoomInfo()}
                     />
                 </Grid>
+                
                 <Grid item xs={12} align='center' >
                     <Button variant='contained' color='secondary' onClick={() => this.toggleShowSettings(false)}> Close</Button>
                 </Grid>
@@ -142,7 +155,7 @@ export default class Room extends Component {
                         Code: {this.roomCode}
                     </Typography> 
                 </Grid>
-                
+                <SongPlayer {...this.state.currentSong} />
                 {this.state.isHost === true ? this.renderSettingsButton() : null}
                 <Grid item xs={12} align='center' >
                     <Button variant='contained' color='secondary' onClick={this.leaveRoom}> Leave Room</Button>
