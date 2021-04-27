@@ -13,15 +13,17 @@ export default class Room extends Component {
             guestCanPause: false,
             isHost: false,
             showSettings: false,
-            spotifyAuth: false
+            spotifyAuth: false,
+            currentSong: {}
             
         }; 
         this.roomCode = this.props.match.params.roomCode;
-        this.getRoomInfo()
+        this.getRoomInfo();
+        this.getCurrentSong();
     }
     // in order to display room data, neet to give back end the code so that it can find the room 
     getRoomInfo = () => {
-        fetch('/api/get-room' + '?code=' + this.roomCode)
+        fetch('/api/get-room/' + '?code=' + this.roomCode)
         .then(res => {
             if(!res.ok) { // if the response is not valid e.g. the room doesn't exist, redirect back to home page
                 this.props.clearRoom();
@@ -65,6 +67,23 @@ export default class Room extends Component {
 
     }
 
+    getCurrentSong = () => {
+        fetch('/spotify_api/current-song')
+        .then(res => {
+            if(!res.ok) {
+                return {}
+            } else {
+                return res.json()
+            }
+        })
+        .then(data => {
+            this.setState({
+                currentSong: data['Current Song']
+            })
+           
+        })
+    }
+
     leaveRoom = () => {
         const requestOptions = {
             method: 'POST',
@@ -89,6 +108,8 @@ export default class Room extends Component {
             </Grid>
         )
     }
+
+    
 
 
     renderSettingsModal = () => {
@@ -119,23 +140,9 @@ export default class Room extends Component {
                 <Grid item xs={12} align='center' >
                     <Typography variant='h4' component='h4' >
                         Code: {this.roomCode}
-                    </Typography>
+                    </Typography> 
                 </Grid>
-                <Grid item xs={12} align='center' >
-                    <Typography variant='h6' component='h6' >
-                        Host: {this.state.isHost === true ? 'True' : 'False'}
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} align='center' >
-                    <Typography variant='h6' component='h6' >
-                        Votes to Skip Song: {this.state.votesToSkip}
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} align='center' >
-                    <Typography variant='h6' component='h6' >
-                        Guest can Pause: {this.state.guestCanPause === true ? 'True' : 'False'}
-                    </Typography>
-                </Grid>
+                
                 {this.state.isHost === true ? this.renderSettingsButton() : null}
                 <Grid item xs={12} align='center' >
                     <Button variant='contained' color='secondary' onClick={this.leaveRoom}> Leave Room</Button>
@@ -154,3 +161,20 @@ export default class Room extends Component {
 <p>Guest Can Pause: {this.state.guestCanPause === true ? 'True' : 'False'}</p>
 <p>Host: {this.state.isHost === true ? 'True' : 'False'}</p>
 </div> */}
+
+
+// <Grid item xs={12} align='center' >
+{/* <Typography variant='h6' component='h6' >
+Host: {this.state.isHost === true ? 'True' : 'False'}
+</Typography>
+</Grid>
+<Grid item xs={12} align='center' >
+<Typography variant='h6' component='h6' >
+Votes to Skip Song: {this.state.votesToSkip}
+</Typography>
+</Grid>
+<Grid item xs={12} align='center' >
+<Typography variant='h6' component='h6' >
+Guest can Pause: {this.state.guestCanPause === true ? 'True' : 'False'}
+</Typography>
+</Grid> */}

@@ -94,8 +94,21 @@ class CurrentSong(APIView):
         for i, artist in enumerate(item.get('artists')):
             if i > 0:
                 artist_string += ", "
-            name = artist.get("name")
+            name = artist.get('name')
+            artist_string += name
+
+        song = {
+            'title': item.get('name'),
+            'artist' : artist_string,
+            'duration' : duration,
+            'time' : progress,
+            'image_url' : album_cover,
+            'is_playing' : is_playing,
+            'votes' : 0,
+            'id' : song_id
+
+        }
 
 
 
-        return Response({"Current Song" : response}, status=status.HTTP_200_OK)
+        return Response({"Current Song" : song}, status=status.HTTP_200_OK)
