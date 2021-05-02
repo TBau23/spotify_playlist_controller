@@ -62,7 +62,6 @@ def refresh_tokens(session_key):
         'client_secret' : CLIENT_SECRET
     }).json()
 
-    refresh_token = response.get('refresh_token')
     access_token = response.get('access_token')
     token_type = response.get('token_type')
     expires_in = response.get('expires_in')
@@ -84,6 +83,11 @@ def send_spotify_api_call(session_key, endpoint, post_=False, put_=False):
     except:
         return {'Error' : 'Request Failed'}
 
+def play_song(session_key):
+    return send_spotify_api_call(session_key, "player/play", put_=True)
+
+def pause_song(session_key):
+    return send_spotify_api_call(session_key, "player/pause", put_=True)
 
 
 

@@ -3,7 +3,7 @@ from rest_framework.views import APIView, status
 from rest_framework.response import Response
 from requests import Request, post
 import os
-from .utils import update_or_create_user_tokens, is_authenticated, send_spotify_api_call
+from .utils import *
 from django.shortcuts import redirect, render
 from api.models import Room
 
@@ -112,3 +112,23 @@ class CurrentSong(APIView):
 
 
         return Response({"Current Song" : song}, status=status.HTTP_200_OK)
+
+class PauseSong(APIView):
+    def put(self, response, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+        if room.guest_can_pause or self.request.session.session_key == room.host:
+            pause_song(room.host)
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+class PlaySong(APIView):
+    def put(self, response, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+        if room.guest_can_pause or self.request.session.session_key == room.host:
+            play_song(room.host)
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
