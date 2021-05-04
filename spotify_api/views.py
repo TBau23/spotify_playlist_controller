@@ -88,6 +88,7 @@ class CurrentSong(APIView):
         album_cover = item.get('album').get('images')[0].get('url')
         is_playing = response.get('is_playing')
         song_id = item.get('id')
+        votes = len(Vote.objects.filter(room=room, song_id=song_id))
 
         # have to clean up artists data for multi artist songs
         artist_string = ""
@@ -98,6 +99,7 @@ class CurrentSong(APIView):
             name = artist.get('name')
             artist_string += name
 
+
         song = {
             'title': item.get('name'),
             'artist' : artist_string,
@@ -105,7 +107,8 @@ class CurrentSong(APIView):
             'time' : progress,
             'image_url' : album_cover,
             'is_playing' : is_playing,
-            'votes' : 0,
+            'votes' : votes,
+            'required_votes' : room.votes_to_skip,
             'id' : song_id
 
         }
@@ -153,6 +156,7 @@ class SkipSong(APIView):
 
 
         if self.request.session.session_key == room.host or len(votes) + 1 >= required_votes:
+            votes.delete()
             skip_song(room.host)
         else:
             vote = Vote(user=self.request.session.session_key, room=room, song_id=room.current_song)
