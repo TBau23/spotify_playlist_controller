@@ -37,7 +37,7 @@ export default class Room extends Component {
 
     // in order to display room data, neet to give back end the code so that it can find the room 
     getRoomInfo = () => {
-        fetch('/api/get-room/' + '?code=' + this.roomCode)
+        fetch('/api/get-room/' + '?code=' + this.roomCode) // matches with line 21 in api.views
         .then(res => {
             if(!res.ok) { // if the response is not valid e.g. the room doesn't exist, redirect back to home page
                 this.props.clearRoom();
