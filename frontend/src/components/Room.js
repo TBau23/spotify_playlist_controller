@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Button, Typography } from '@material-ui/core';
+import { Grid, Button, Typography, Card } from '@material-ui/core';
 import CreateRoomPage from './CreateRoomPage';
 import SongPlayer from './SongPlayer'
 
@@ -52,7 +52,7 @@ export default class Room extends Component {
                 isHost: data.is_host
             })
             if(this.state.isHost) {
-                console.log('wooh')
+                
                 this.authenticateHostSpotify()
             }
         })
@@ -63,7 +63,7 @@ export default class Room extends Component {
         fetch('/spotify_api/is-authenticated/')
         .then(res => res.json())
         .then(data => {
-            console.log(data)
+            
             this.setState({
                 spotifyAuth: data.status
             })
@@ -71,6 +71,7 @@ export default class Room extends Component {
                 fetch('/spotify_api/get-auth-url/')
                 .then(res => res.json())
                 .then(data => {
+                    console.log(data)
                     window.location.replace(data.url);
                     
                 })
@@ -89,6 +90,8 @@ export default class Room extends Component {
             }
         })
         .then(data => {
+            console.log(data)
+            
             this.setState({
                 currentSong: data['Current Song']
             })
@@ -121,8 +124,6 @@ export default class Room extends Component {
         )
     }
 
-    
-
 
     renderSettingsModal = () => {
         return (
@@ -143,6 +144,28 @@ export default class Room extends Component {
             </Grid>
         )
     }
+
+    renderSongPlayer = () => {
+        return (
+            <SongPlayer {...this.state.currentSong} />
+        )
+        
+    }
+
+    renderNoMusic = () => {
+        return (
+            <Card>
+                <Grid container spacing={1}>
+                    <Grid item align='center' xs={12}>
+                        <Typography variant='h5' component='h5'>
+                            No Music Being Played
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </Card>
+        )
+    }
+    
     
     render() {
         if(this.state.showSettings) {
@@ -155,7 +178,8 @@ export default class Room extends Component {
                         You're listening in room: {this.roomCode}
                     </Typography> 
                 </Grid>
-                <SongPlayer {...this.state.currentSong} />
+                
+                {this.state.currentSong.artist ? this.renderSongPlayer() : this.renderNoMusic()}
                 {this.state.isHost === true ? this.renderSettingsButton() : null}
                 <Grid item xs={12} align='center' >
                     <Button variant='contained' color='secondary' onClick={this.leaveRoom}> Leave Room</Button>
