@@ -60,15 +60,16 @@ export default class JoinRoomPage extends Component {
                         helperText={this.state.error}
                         variant='outlined'
                         onChange={this.handleCodeChange}
+                        style={{color:'white'}}
                     />
                 </Grid>
                 <Grid item xs={12} align='center'>
-                    <Button variant='contained' color='primary' onClick={this.handleJoinRoom}>
+                    <Button variant='outlined' color='secondary' onClick={this.handleJoinRoom}>
                         Enter
                     </Button>
                 </Grid>
                 <Grid item xs={12} align='center'>
-                    <Button variant='contained' color='secondary' to='/' component={Link}>
+                    <Button variant='outlined' style={{borderColor: '#3FEEE6', color: '#3FEEE6'}} to='/' component={Link}>
                         Back
                     </Button>
                 </Grid>

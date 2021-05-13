@@ -119,7 +119,7 @@ export default class Room extends Component {
     renderSettingsButton = () => {
         return (
             <Grid item xs={12} align='center'>
-                <Button variant='contained' color='primary' onClick={() => this.toggleShowSettings(true)}>Settings</Button>
+                <Button variant='outlined' color='secondary' onClick={() => this.toggleShowSettings(true)}>Settings</Button>
             </Grid>
         )
     }
@@ -139,7 +139,7 @@ export default class Room extends Component {
                 </Grid>
                 
                 <Grid item xs={12} align='center' >
-                    <Button variant='contained' color='secondary' onClick={() => this.toggleShowSettings(false)}> Close</Button>
+                    <Button variant='outlined' style={{borderColor: '#3FEEE6', color: '#3FEEE6'}} onClick={() => this.toggleShowSettings(false)}> Close</Button>
                 </Grid>
             </Grid>
         )
@@ -154,15 +154,11 @@ export default class Room extends Component {
 
     renderNoMusic = () => {
         return (
-            <Card>
-                <Grid container spacing={1}>
-                    <Grid item align='center' xs={12}>
+                    <Grid item xs={12} align='center' >
                         <Typography variant='h5' component='h5'>
-                            No Music Being Played
+                            Host must play music via Spotify
                         </Typography>
                     </Grid>
-                </Grid>
-            </Card>
         )
     }
     
@@ -172,7 +168,7 @@ export default class Room extends Component {
             return this.renderSettingsModal();
         }
         return (
-            <Grid container spacing={1}>
+            <Grid container spacing={3}>
                 <Grid item xs={12} align='center' >
                     <Typography variant='h4' component='h4' >
                         You're listening in room: {this.roomCode}
@@ -182,7 +178,7 @@ export default class Room extends Component {
                 {this.state.currentSong.artist ? this.renderSongPlayer() : this.renderNoMusic()}
                 {this.state.isHost === true ? this.renderSettingsButton() : null}
                 <Grid item xs={12} align='center' >
-                    <Button variant='contained' color='secondary' onClick={this.leaveRoom}> Leave Room</Button>
+                    <Button variant='outlined' style={{borderColor: '#3FEEE6', color: '#3FEEE6'}} onClick={this.leaveRoom}> Leave Room</Button>
                 </Grid>
                 
                 

@@ -82,12 +82,12 @@ export default class CreateRoomPage extends Component {
         return(
             <Grid container spacing={1}>
                 <Grid item xs={12} align='center'>
-                    <Button color='secondary' variant='contained' onClick={() => this.handleCreateRoom()} >
+                    <Button color='secondary' variant='outlined' onClick={() => this.handleCreateRoom()} >
                         Create A Room
                     </Button>
                 </Grid>
                 <Grid item xs={12} align='center'>
-                    <Button style={{backgroundColor: 'orange'}} variant='contained' to='/' component={Link}>
+                    <Button style={{borderColor: '#3FEEE6', color: '#3FEEE6'}} variant='outlined' to='/' component={Link}>
                         Back
                     </Button>
                 
@@ -100,7 +100,7 @@ export default class CreateRoomPage extends Component {
         return (
             <Grid container spacing={1}>
                 <Grid item xs={12} align='center'>
-                    <Button color='secondary' variant='contained' onClick={() => this.handleUpdateRoom()} >
+                    <Button color='secondary' variant='outlined' onClick={() => this.handleUpdateRoom()} >
                         Update Room
                     </Button>
                 </Grid>
@@ -135,7 +135,7 @@ export default class CreateRoomPage extends Component {
                         <RadioGroup row defaultValue={this.state.guestCanPause.toString()} onChange={(e) => this.handleGuestCanPause(e)}>
                             <FormControlLabel
                             value='true'
-                            control={<Radio color='primary' />}
+                            control={<Radio style={{color: '#3FEEE6'}} />}
                             label='Play/Pause'
                             labelPlacement='bottom'
                             />
