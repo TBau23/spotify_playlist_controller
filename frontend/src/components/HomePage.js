@@ -20,7 +20,7 @@ export default class Homepage extends Component {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} align='center'>
-                    <ButtonGroup disableElevation variant='outlined' color='primary'>
+                    <ButtonGroup disableElevation variant='outlined' color='primary' size='large'>
                         <Button style={{backgroundColor:'#3FEEE6'}} to='/join' component={ Link } > Join A Room</Button>
                         <Button color='secondary' variant='outlined' to='/create' component={ Link } > Create A Room</Button>
                     </ButtonGroup>
