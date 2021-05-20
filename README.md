@@ -1,6 +1,8 @@
 # spotify_playlist_controller
 Tool to control what's playing on Spotify for group hangout. Built with Django and React.
 
+Watch a quick demo of the project here: https://www.loom.com/share/8304ca82aeda48d1960c4c5dd259403f
+
 Have not deployed this project yet. 
 
 In order to run locally:
